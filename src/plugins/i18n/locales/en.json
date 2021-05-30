@@ -1,0 +1,13 @@
+{
+  "hello": "hello",
+  "required_male": "{entity} required",
+  "required_female": "{entity} required",
+  "username": "Username",
+  "password": "Password",
+  "username-no-exits-in-database": "The user name you provided does not match our records",
+  "dashboard": "dashboard",
+  "about-me": "About me",
+  "my-profile": "Me profile",
+  "logout": "Logout",
+  "name": "Name"
+}

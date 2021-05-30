@@ -1,0 +1,13 @@
+{
+  "hello": "hola",
+  "required_male": "{entity} requerido",
+  "required_female": "{entity} requerida",
+  "username": "Nombre de usuario",
+  "password": "Contraseña",
+  "username-no-exits-in-database": "El nombre de usuario introducido no coincide con nuestros registros",
+  "dashboard": "Cuadro de mando",
+  "about-me": "Sobre mí",
+  "my-profile": "Mi perfil",
+  "name": "Nombre",
+  "logout": "Cierre de sesión"
+}
