@@ -1,41 +1,39 @@
 <template>
-  <v-snackbar
-    v-model="show"
-  >
-    {{ text }}
 
-    <template v-slot:action="{ attrs }">
-      <v-btn
-        :color="color"
-        text
-        v-bind="attrs"
-        @click="show = false"
-      >
-        Close
-      </v-btn>
-    </template>
-  </v-snackbar>
+  <v-col align="bottom">
+    <v-snackbar v-model="snackbar" :timeout="5000" :color=color>
+      <div class="d-flex align-center">
+        <span v-html="message"></span>
+        <v-icon class="ml-auto" @click = "snackbar = false">mdi-close</v-icon>
+      </div>
+    </v-snackbar>
+  </v-col>
+
 </template>
 
-<script lang="js">
+<script>
 export default {
-  name: 'snackbar',
-  props: {
-    text: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
-  },
   data: () => ({
-    show: false,
+    resolve: null,
+    reject: null,
+    action: '',
+    snackbar: false,
+    color: null,
+    message: null,
   }),
   methods: {
-    show({ text: setText, color: setColor }) {
-      this.show = true;
-      this.text = setText;
-      this.color = setColor;
+    open({ color, message }) {
+      this.snackbar = true;
+      this.color = color;
+      this.message = message;
+      return new Promise((resolve, reject) => {
+        this.resolve = resolve;
+        this.reject = reject;
+      });
+    },
+    cancel() {
+      this.resolve(false);
+      this.snackbar = false;
     },
   },
 };

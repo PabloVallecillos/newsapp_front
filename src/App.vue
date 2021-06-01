@@ -23,4 +23,15 @@ export default {
   width: 100%;
   height: 100%;
 }
+.v-input__icon--prepend-inner {
+  margin-right: 8px !important;
+}
+::-moz-selection {
+  color: black;
+  background: #ffca45 !important
+}
+::selection {
+  color: black;
+  background: #ffca45 !important
+}
 </style>

@@ -9,5 +9,11 @@
   "about-me": "Sobre mí",
   "my-profile": "Mi perfil",
   "name": "Nombre",
-  "logout": "Cierre de sesión"
+  "lastname": "Apellidos",
+  "logout": "Cierre de sesión",
+  "email": "Correo electrónico",
+  "description": "Descripción",
+  "save": "Guardar",
+  "file-type": "Solo puedes subir una imagen png, jpg ó jpeg",
+  "profile-updated": "Perfil actualizado correctamente"
 }

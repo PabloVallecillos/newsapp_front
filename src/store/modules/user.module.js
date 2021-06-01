@@ -1,7 +1,6 @@
 import api from '@/utils/requests/api';
 import router from '@/router';
 import Cookies from 'js-cookie';
-import loginForm from '@/components/cards/login-form.vue';
 
 const userModule = {
   namespaced: true,
@@ -16,11 +15,15 @@ const userModule = {
     logout: {
       errors: null,
     },
+    snackbar: {
+      show: false,
+    },
   },
   getters: {
     getUser: (state) => state.user.data ?? JSON.parse(localStorage.getItem('newsapp_user_logged')),
     getLoginErrors: (state) => state.login.errors,
     getIsUserLoggedIn: (state) => state.user.auth ?? !!Cookies.get('newsapp_is_user_logged_in'),
+    getIsShowSnackbar: (state) => state.snackbar.show,
     getUrlLoginFacebook: () => `${process.env.VUE_APP_API_URL}/es/user/login/facebook`,
     getUrlLoginGoogle: () => `${process.env.VUE_APP_API_URL}/es/user/login/google`,
   },
@@ -58,15 +61,21 @@ const userModule = {
       localStorage.setItem('newsapp_user_logged', JSON.stringify(data.data));
     },
     async fetchEditUserProfile(context, profile) {
-      const { data } = await api.post('user/profile/edit', ...profile);
+      const fd = new FormData();
+      for (const key in profile) {
+        fd.append(key, profile[key]);
+      }
+      const { data } = await api.post(`user/profile/edit/${profile.id}`, fd);
       context.commit('SET_USER', data.data);
       localStorage.setItem('newsapp_user_logged', JSON.stringify(data.data));
+      context.commit('SET_SHOW_SNACKBAR');
     },
   },
   mutations: {
     SET_ERRORS: (state, errors) => state.login.errors = errors,
     SET_USER: (state, user) => state.user.data = user,
     SET_AUTH: (state, auth) => state.user.auth = auth,
+    SET_SHOW_SNACKBAR: (state) => state.snackbar.show = !state.snackbar.show,
   },
 };
 

@@ -9,5 +9,11 @@
   "about-me": "About me",
   "my-profile": "Me profile",
   "logout": "Logout",
-  "name": "Name"
+  "name": "Name",
+  "lastname": "Lastname",
+  "email": "Email",
+  "description": "Description",
+  "save": "Save",
+  "file-type": "You can only upload one png, jpg or jpeg image",
+  "profile-updated": "Profile updated correctly"
 }

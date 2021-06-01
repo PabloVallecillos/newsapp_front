@@ -9,42 +9,43 @@
       />
     </section>
     <v-form ref="loginForm" v-model="vModalLoginForm" lazy-validation>
+      <v-col class="d-flex align-center pa-10">
+        <v-icon x-large color="black" class="ml-2">mdi-newspaper-variant-multiple-outline</v-icon>
+        <h1 class="ml-2 black--text">newsapp</h1>
+      </v-col>
       <v-text-field
-        class="mx-1"
+        class="mr-4 ml-4"
         v-model="user.username"
-        append-icon="mdi-account-outline"
+        prepend-inner-icon="mdi-account-outline"
         :label="$t('username')"
         :rules="usernameRules"
         outlined
-        filled
         dense
-        color="dark"
+        color="grey darken-1"
+        item-color="grey darken-1"
       ></v-text-field>
       <v-text-field
-        class="mx-1"
+        class="mr-4 ml-4"
         v-model="user.password"
-        append-icon="mdi-key-outline"
+        prepend-inner-icon="mdi-key-outline"
         :label="$t('password')"
         :rules="passwordRules"
         outlined
-        filled
         dense
-        color="dark"
+        color="grey darken-1"
+        item-color="grey darken-1"
         type="password"
       ></v-text-field>
-      <v-row class="justify-center mx-1">
-        <v-btn
-          elevation="3"
-          class="mb-6 mt-6 full-width"
-          large
-          :loading="loadingBtn.login"
-          :disabled="!vModalLoginForm"
-          @click="validateAndLogin"
-          block
-          color="var(--off)"
-        >
-          Login
-        </v-btn>
+      <v-btn
+        elevation="3"
+        class="mr-4 ml-4 mb-4"
+        style="width: 89%;"
+        :loading="loadingBtn.login"
+        :disabled="!vModalLoginForm"
+        @click="validateAndLogin"
+      >
+        Login
+      </v-btn>
 <!--        <v-btn-->
 <!--          elevation="3"-->
 <!--          class="mb-6 mt-6 full-width"-->
@@ -67,7 +68,6 @@
 <!--        >-->
 <!--          Login <v-icon class="ml-2" small>mdi-facebook</v-icon>-->
 <!--        </v-btn>-->
-      </v-row>
     </v-form>
   </v-card>
 </template>
