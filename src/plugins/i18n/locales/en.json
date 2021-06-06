@@ -15,5 +15,17 @@
   "description": "Description",
   "save": "Save",
   "file-type": "You can only upload one png, jpg or jpeg image",
-  "profile-updated": "Profile updated correctly"
+  "profile-updated": "Profile updated correctly",
+  "details": "Details",
+  "settings": "Settings",
+  "select-lang": "Select language",
+  "enable-mode": "Enable {mode} mode",
+  "dark": "dark",
+  "light": "light",
+  "english": "English",
+  "spanish": "Spanish",
+  "2fa": "{value} two factor authentication",
+  "enable": "Enable",
+  "disable": "Disable",
+  "recovery-codes": "Recovery codes | Recovery code"
 }

@@ -15,6 +15,9 @@ export default {
   components: {
     'custom-nav': nav,
   },
+  beforeCreate() {
+    this.$vuetify.theme.dark = localStorage.getItem('newsapp_theme_dark') === 'true';
+  },
 };
 </script>
 

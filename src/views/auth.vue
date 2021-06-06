@@ -1,5 +1,8 @@
 <template>
-  <div>{{ $t('dashboard') }}</div>
+  <div>
+    {{ $t('dashboard') }}
+    <snackbar></snackbar>
+  </div>
 </template>
 
 <script>

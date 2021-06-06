@@ -48,11 +48,11 @@
         </v-avatar>
       </template>
 
-      <v-list dense>
+      <v-list dense color="grey lighten-2">
         <v-list>
           <v-list-item-group>
             <v-list-item
-              active-class="deep-purple--text text--accent-6"
+              active-class="grey--text text--accent-6"
               v-if="getUser"
               :to="{ name: 'user-details', params: { id: getUser.id } }"
             >
@@ -64,9 +64,9 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              active-class="deep-purple--text text--accent-6"
+              active-class="grey--text text--accent-6"
               v-if="getIsUserLoggedIn"
-              @click="logout()"
+              @click="fetchLogout()"
             >
               <v-list-item-icon>
                 <v-icon>mdi-logout</v-icon>
@@ -90,7 +90,7 @@ export default {
     selectedItem: 1,
   }),
   methods: {
-    ...mapActions('userModule', ['logout']),
+    ...mapActions('userModule', ['fetchLogout']),
   },
   computed: {
     ...mapGetters('userModule', ['getUser', 'getIsUserLoggedIn']),

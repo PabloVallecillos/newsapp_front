@@ -15,5 +15,17 @@
   "description": "Descripción",
   "save": "Guardar",
   "file-type": "Solo puedes subir una imagen png, jpg ó jpeg",
-  "profile-updated": "Perfil actualizado correctamente"
+  "profile-updated": "Perfil actualizado correctamente",
+  "details": "Detalles",
+  "settings": "Ajustes",
+  "select-lang": "Seleccione el idioma",
+  "enable-mode": "Habilitar modo {mode}",
+  "dark": "oscuro",
+  "light": "claro",
+  "english": "Inglés",
+  "spanish": "Español",
+  "2fa": "{value} autenticación en dos pasos",
+  "enable": "Habilitar",
+  "disable": "Deshabilitar",
+  "recovery-codes": "Códigos de recuperación | Código de recuperación"
 }
