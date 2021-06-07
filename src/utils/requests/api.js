@@ -29,6 +29,7 @@ instance.interceptors.response.use((response) => {
       vCardActions: {
         value: true,
       },
+      persistent: true,
     });
   }
   store.dispatch('snackbarModule/showSnackbar',

@@ -1,18 +1,18 @@
 <template>
   <background>
     <template v-slot:form>
-      <login-form/>
+      <register/>
     </template>
   </background>
 </template>
 
 <script>
-import loginForm from '@/components/cards/login-form.vue';
+import register from '@/components/cards/register-form.vue';
 import background from '@/components/background/background.vue';
 
 export default {
   components: {
-    'login-form': loginForm,
+    register,
     background,
   },
 };

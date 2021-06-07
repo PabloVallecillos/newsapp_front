@@ -27,5 +27,10 @@
   "2fa": "{value} autenticación en dos pasos",
   "enable": "Habilitar",
   "disable": "Deshabilitar",
-  "recovery-codes": "Códigos de recuperación | Código de recuperación"
+  "recovery-codes": "Códigos de verificación | Código de verificación",
+  "confirm-password": "Contraseña de verificación",
+  "code": "Código Qr",
+  "use": "Use {word}",
+  "scan-code-or-use-verification": "Escanee el código Qr ó utilize uno de los codigos de verificación",
+  "2fa-activate": "Autenticación en dos pasos activada"
 }

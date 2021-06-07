@@ -4,14 +4,17 @@
     :max-width="getDialog.options.width"
     :style="{ zIndex: getDialog.options.zIndex }"
     @keydown.esc="getDialog.show = false"
+    :persistent="getDialog.options.persistent"
   >
     <v-card>
       <v-toolbar dark :color="getDialog.options.vToolBar.color" dense flat>
         <v-toolbar-title :class="getDialog.options.vToolBar.class">
-          {{ $t(getDialog.options.vToolBar.title) }}
+          <div style="width: border-box">
+            {{ $t(getDialog.options.vToolBar.title) }}
+          </div>
         </v-toolbar-title>
       </v-toolbar>
-      <div class="pt-4 pl-4 pr-4 mb-n2 mx-1">
+      <div class="pl-4 pr-4 mb-n2 mx-1">
         <slot name="component"></slot>
       </div>
       <v-card-actions class="pt-4">

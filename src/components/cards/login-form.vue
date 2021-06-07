@@ -6,7 +6,7 @@
         <h1 class="ml-2 black--text">newsapp</h1>
       </v-col>
       <v-scroll-y-transition>
-        <div v-if="!getIs2fa">
+        <div v-if="!getIs2fa || !user.show2faForm">
           <v-text-field
             class="mr-4 ml-4"
             v-model="user.username"
@@ -45,13 +45,13 @@
         </div>
       </v-scroll-y-transition>
       <v-scroll-y-transition>
-        <div v-if="getIs2fa">
+        <div v-if="getIs2fa && user.show2faForm">
           <v-text-field
             class="mr-4 ml-4"
             v-model="user.recoveryCode"
             prepend-inner-icon="mdi-key-outline"
-            :label="$tc('recovery-codes', 2)"
-            :rules="recoveryCodeRules"
+            :label="user.checkRecoveryOrCode ? $t('code') : $tc('recovery-codes', 2)"
+            :rules="user.checkRecoveryOrCode ?  codeRules : recoveryCodeRules"
             outlined
             dense
             color="grey darken-1"
@@ -59,10 +59,18 @@
             type="password"
             @keydown.enter="validateAndLogin2fa"
           ></v-text-field>
+          <v-checkbox
+            v-model="user.checkRecoveryOrCode"
+            :label="$t('use', { word: $t('code') })"
+            color="grey darken-1"
+            item-color="grey darken-1"
+            class="mt-n2 ml-4"
+            style="width: fit-content"
+          ></v-checkbox>
           <v-btn
             elevation="3"
             class="mr-4 ml-4 mb-4"
-            style="width: 89%;"
+            width="-webkit-fill-available"
             :loading="getLoading"
             :disabled="!vModalLoginForm"
             @click="validateAndLogin2fa"
@@ -111,9 +119,11 @@ export default {
       facebook: false,
     },
     user: {
+      show2faForm: false,
       username: null,
       password: null,
       recoveryCode: null,
+      checkRecoveryOrCode: false,
     },
   }),
   computed: {
@@ -124,12 +134,13 @@ export default {
     validateAndLogin() {
       if (this.$refs.loginForm.validate()) {
         this.fetchLogin({ username: this.user.username, password: this.user.password });
+        this.user.show2faForm = true;
       }
     },
     validateAndLogin2fa() {
       if (this.$refs.loginForm.validate()) {
         const data = {};
-        if (true) { // check use recovery code
+        if (!this.user.checkRecoveryOrCode) {
           data.recovery_code = this.user.recoveryCode;
         } else {
           data.code = this.user.recoveryCode;

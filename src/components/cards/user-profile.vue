@@ -248,12 +248,24 @@
               </template>
             </v-select>
             <v-flex class="d-flex flex-column justify-space-between">
+              <div class="d-flex">
               <v-switch
-                :v-model="settings.f2a.value"
-                @change="settings.f2a.value = !settings.f2a.value"
+                @click="settings.f2a.value = !settings.f2a.value"
+                :input-value="settings.f2a.value"
                 color="grey darken-1"
+                ref="f2a"
                 :label="$t('2fa', { value: $t(settings.f2a.literal) })"
               ></v-switch>
+                <v-scroll-x-transition>
+                  <v-icon
+                    class="ml-auto eye-class"
+                    v-if="settings.f2a.value"
+                    @click="enable2fa"
+                  >
+                    mdi-eye-outline
+                  </v-icon>
+                </v-scroll-x-transition>
+              </div>
               <div class="d-flex">
                 <v-switch
                   :v-model="settings.themeSwitcher.value"
@@ -282,18 +294,24 @@
         :onClickCheck="onClickCheckDialog"
       >
         <template v-slot:component v-if="!getUser.qrCode">
-          <v-text-field
-            v-model="profile.passwordConfirmation"
-            prepend-inner-icon="mdi-key-outline"
-            :label="$t('password')"
-            color="grey darken-1"
-            item-color="grey darken-1"
-            outlined
-            dense
-            type="password"
-          ></v-text-field>
+          <v-form v-model="form.passwordConfirmation" ref="passwordConfirmationForm">
+            <v-text-field
+              v-model="profile.passwordConfirmation"
+              prepend-inner-icon="mdi-key-outline"
+              :label="$t('password')"
+              :rules="passwordConfirmationRules"
+              color="grey darken-1"
+              item-color="grey darken-1"
+              outlined
+              dense
+              type="password"
+            ></v-text-field>
+          </v-form>
         </template>
         <template v-slot:component v-else>
+          <v-card-text class="ml-n2 mt-2 mb-n2">
+            {{ $t('scan-code-or-use-verification') }}
+          </v-card-text>
           <div class="d-flex align-center justify-center flex-column">
             <div v-html="getUser.qrCode"></div>
             <h4 v-text="$tc('recovery-codes', 1)" class="mb-2 mt-1"></h4>
@@ -314,6 +332,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import validationRules from '@/utils/validationRules';
 
 export default {
   name: 'profile-card',
@@ -344,6 +363,9 @@ export default {
           icon: '$spanish',
         },
       ],
+    },
+    form: {
+      passwordConfirmation: false,
     },
     profile: {
       passwordConfirmation: null,
@@ -384,7 +406,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('userModule', ['fetchEditUserProfile']),
+    ...mapActions('userModule', ['fetchEditUserProfile', 'enable2fa']),
     fillProfile() {
       this.profile.id = this.getUser.id;
       this.profile.email = this.getUser.email;
@@ -409,13 +431,24 @@ export default {
       return data;
     },
     onClickCloseDialog() {
-      this.getDialog.show = false;
-      this.profile.passwordConfirmation = null;
+      if (this.$refs.passwordConfirmationForm.validate()) {
+        this.settings.f2a.value = !this.settings.f2a.value;
+        this.getDialog.show = false;
+        this.profile.passwordConfirmation = null;
+      }
     },
     onClickCheckDialog() {
-      this.$store.dispatch('userModule/confirmPassword2fa', {
-        password: this.profile.passwordConfirmation,
-      });
+      if (this.$refs.passwordConfirmationForm.validate()) {
+        if (this.settings.f2a.value) {
+          this.$store.dispatch('userModule/confirmPassword2fa', {
+            password: this.profile.passwordConfirmation,
+          });
+        } else {
+          this.getDialog.show = false;
+          this.$store.commit('userModule/SET_TWO_FACTOR', false);
+        }
+        setTimeout(() => this.profile.passwordConfirmation = null, 400);
+      }
     },
   },
   watch: {
@@ -451,7 +484,7 @@ export default {
     'settings.f2a.value': function (val) {
       if (val) {
         this.settings.f2a.literal = 'disable';
-        this.$store.dispatch('userModule/enable2fa');
+        if (this.profileDataLoaded) this.enable2fa();
       } else {
         this.settings.f2a.literal = 'enable';
         this.$store.dispatch('userModule/disable2fa');
@@ -460,10 +493,12 @@ export default {
   },
   async mounted() {
     this.settings.themeSwitcher.value = localStorage.getItem('newsapp_theme_dark') === 'true';
+    this.settings.f2a.value = localStorage.getItem('newsapp_two_factor') === 'true';
     this.fillProfile();
     this.$nextTick(() => this.profileDataLoaded = true);
     setTimeout(() => this.show.skeleton = false, 100);
   },
+  mixins: [validationRules],
 };
 </script>
 
@@ -485,6 +520,11 @@ export default {
 
 .v-input--switch {
   width: fit-content;
+}
+.eye-class {
+  height: fit-content;
+  width: fit-content;
+  align-self: center;
 }
 
 @media only screen and (max-width: 600px) {

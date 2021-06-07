@@ -24,6 +24,11 @@ const routes = [{
       beforeEnter: isAuth,
     },
     {
+      path: 'register',
+      name: 'register',
+      component: load('register'),
+    },
+    {
       path: 'auth',
       name: 'auth',
       component: load('auth'),

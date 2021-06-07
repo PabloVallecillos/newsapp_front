@@ -14,6 +14,7 @@ const dialogModule = {
         vCardActions: {
           value: true,
         },
+        persistent: true,
       },
     },
   },

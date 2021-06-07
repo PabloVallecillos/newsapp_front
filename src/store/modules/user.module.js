@@ -23,7 +23,7 @@ const userModule = {
   },
   getters: {
     getUser: (state) => state.user.data ?? JSON.parse(localStorage.getItem('newsapp_user_logged')),
-    getIs2fa: (state) => state.user.twoFactor ?? JSON.parse(localStorage.getItem('newsapp_two_factor')),
+    getIs2fa: (state) => state.user.twoFactor ?? localStorage.getItem('newsapp_two_factor') === 'true',
     getIsUserLoggedIn: (state) => state.user.auth ?? !!Cookies.get('newsapp_is_user_logged_in'),
     getLoading: (state) => state.show.loading,
     getUrlLoginFacebook: () => `${process.env.VUE_APP_API_URL}/es/user/login/facebook`,
@@ -55,7 +55,12 @@ const userModule = {
     },
     logout(context) {
       context.commit('SET_AUTH', false);
-      localStorage.clear();
+      for (let i = 0; i < localStorage.length; i += 1) {
+        const keyString = localStorage.key(i);
+        if (keyString !== 'newsapp_theme_dark' && keyString !== 'newsapp_two_factor') {
+          localStorage.removeItem(keyString);
+        }
+      }
       Cookies.remove('newsapp_is_user_logged_in', { expires: 86400, sameSite: 'lax' });
       router.push({ name: 'login' });
     },
@@ -78,7 +83,6 @@ const userModule = {
     },
     setThemeDark(context, theme) {
       context.commit('SET_THEME_DARK', theme);
-      localStorage.setItem('newsapp_theme_dark', theme);
     },
     // 2fa
     enable2fa(context, password) {
@@ -90,7 +94,7 @@ const userModule = {
               vToolBar: {
                 color: 'grey lighten-3',
                 class: 'black--text',
-                title: 'lastname',
+                title: '2fa-activate',
               },
               width: 500,
               zIndex: 200,
@@ -98,6 +102,7 @@ const userModule = {
                 value: false,
               },
             }, { root: true });
+            context.commit('SET_TWO_FACTOR', true);
           }
         });
     },
@@ -105,30 +110,32 @@ const userModule = {
       api.post('/fortify/user/confirm-password', password)
         .then(async (res) => {
           if (res.status === 201) {
-            await context.dispatch('qrCodeAndCodes2fa');
+            await context.dispatch('enable2fa');
           }
         });
     },
     async qrCodeAndCodes2fa(context) {
       const resQrCode = await api.get('fortify/user/two-factor-qr-code');
       const resCodes = await api.get('fortify/user/two-factor-recovery-codes');
+      const qrCode = resQrCode.data.svg.replace('fill="#2d3748"', 'fill="#fcb74d"');
       context.commit('SET_USER', {
         ...context.getters.getUser,
-        qrCode: resQrCode.data.svg,
+        qrCode,
         recoveryCodes: resCodes.data,
       });
     },
     async disable2fa(context) {
-      const oldUser = context.getters.getUser;
-      delete oldUser.qrCode;
-      delete oldUser.recoveryCodes;
+      localStorage.removeItem('newsapp_user_logged');
+      await context.dispatch('fetchUserLogged');
       await api.delete('/fortify/user/two-factor-authentication');
+      context.commit('SET_TWO_FACTOR', false);
     },
     fetchVerificationCode(context, code) {
       context.commit('SET_LOADING');
       api.post('/fortify/two-factor-challenge', code)
-        .then(() => context.dispatch('login'))
-        .finally(() => context.commit('SET_LOADING'));
+        .then((res) => {
+          if (res?.status === 204) context.dispatch('login');
+        }).finally(() => context.commit('SET_LOADING'));
     },
     // 2fa
   },
@@ -140,6 +147,9 @@ const userModule = {
     SET_USER: (state, user) => {
       state.user.data = user;
       localStorage.setItem('newsapp_user_logged', JSON.stringify(user));
+    },
+    SET_THEME_DARK: (state, value) => {
+      localStorage.setItem('newsapp_theme_dark', value);
     },
     SET_AUTH: (state, auth) => state.user.auth = auth,
     SET_LOADING: (state) => state.show.loading = !state.show.loading,
