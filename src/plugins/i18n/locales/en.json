@@ -29,8 +29,19 @@
   "disable": "Disable",
   "recovery-codes": "Verification codes | Verification code",
   "confirm-password": "Verification password",
+  "confirm-password-2": "Password confirmation",
   "code": "Qr code",
   "use": "Use {word}",
   "scan-code-or-use-verification": "Scan the Qr code or use one of the following verification codes",
-  "2fa-activate": "Two factor authentication enabled"
+  "2fa-activate": "Two factor authentication enabled",
+  "login": "Login",
+  "register": "Register",
+  "if-you-want": "If you want, you can",
+  "should-be-equals-to": "must be equal to",
+  "invalid-email": "Invalid email",
+  "alredy-exists": "alredy exists",
+  "user-register": "Welcome, {user} check your email to login",
+  "passwords": {
+    "length": "Must have at least 8 characters"
+  }
 }

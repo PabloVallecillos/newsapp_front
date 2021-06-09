@@ -7,11 +7,9 @@
     :persistent="getDialog.options.persistent"
   >
     <v-card>
-      <v-toolbar dark :color="getDialog.options.vToolBar.color" dense flat>
+      <v-toolbar dark :color="getDialog.options.vToolBar.color" dense flat class="d-flex justify-center">
         <v-toolbar-title :class="getDialog.options.vToolBar.class">
-          <div style="width: border-box">
             {{ $t(getDialog.options.vToolBar.title) }}
-          </div>
         </v-toolbar-title>
       </v-toolbar>
       <div class="pl-4 pr-4 mb-n2 mx-1">

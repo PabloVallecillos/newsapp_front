@@ -1,9 +1,9 @@
-import VueI18n from '@/plugins/i18n';
+import { i18n } from '@/plugins/i18n';
 
 export default (to, from, next) => {
   const { locale } = to.params;
-  const supportedLocales = Object.keys(VueI18n.messages);
-  if (!supportedLocales.includes(locale)) return next(VueI18n.locale);
-  VueI18n.locale = locale;
+  const supportedLocales = Object.keys(i18n.messages);
+  if (!supportedLocales.includes(locale)) return next(i18n.locale);
+  i18n.locale = locale;
   return next();
 };

@@ -257,9 +257,15 @@
                 :label="$t('2fa', { value: $t(settings.f2a.literal) })"
               ></v-switch>
                 <v-scroll-x-transition>
+                  <v-icon v-if="!settings.f2a.value" class="ml-auto">
+                    mdi-shield-key-outline
+                  </v-icon>
+                </v-scroll-x-transition>
+                <v-scroll-x-transition>
                   <v-icon
-                    class="ml-auto eye-class"
                     v-if="settings.f2a.value"
+                    class="mt-5"
+                    style="position: absolute; right: 16px;"
                     @click="enable2fa"
                   >
                     mdi-eye-outline
@@ -296,10 +302,11 @@
         <template v-slot:component v-if="!getUser.qrCode">
           <v-form v-model="form.passwordConfirmation" ref="passwordConfirmationForm">
             <v-text-field
+              class="mt-4 mb-n4"
               v-model="profile.passwordConfirmation"
               prepend-inner-icon="mdi-key-outline"
               :label="$t('password')"
-              :rules="passwordConfirmationRules"
+              :rules="passwordConfirmationRulesDialog"
               color="grey darken-1"
               item-color="grey darken-1"
               outlined
@@ -309,7 +316,7 @@
           </v-form>
         </template>
         <template v-slot:component v-else>
-          <v-card-text class="ml-n2 mt-2 mb-n2">
+          <v-card-text class="d-flex justify-center">
             {{ $t('scan-code-or-use-verification') }}
           </v-card-text>
           <div class="d-flex align-center justify-center flex-column">
@@ -461,7 +468,6 @@ export default {
         this.$store.dispatch('snackbarModule/showSnackbar', {
           color: 'red',
           message: this.$t('file-type'),
-          translate: false,
         });
       }
     },

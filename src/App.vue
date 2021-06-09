@@ -37,4 +37,22 @@ export default {
   color: black;
   background: #ffca45 !important
 }
+.bounce-enter-active {
+  animation: bounce-in .5s ease-in-out;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s alternate-reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: translateX(150%);
+  }
+  100% {
+    /*transform: translateX(0);*/
+    transform: none !important;
+  }
+}
+.back-gradient-login-form {
+  background-image: linear-gradient(0deg, rgb(238, 238, 238) 0%, rgb(255, 255, 255) 46%, rgb(238, 238, 238) 100%);
+}
 </style>

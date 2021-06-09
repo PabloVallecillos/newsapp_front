@@ -12,6 +12,7 @@
   "lastname": "Apellidos",
   "logout": "Cierre de sesión",
   "email": "Correo electrónico",
+  "invalid-email": "Correo electrónico inválido",
   "description": "Descripción",
   "save": "Guardar",
   "file-type": "Solo puedes subir una imagen png, jpg ó jpeg",
@@ -29,8 +30,18 @@
   "disable": "Deshabilitar",
   "recovery-codes": "Códigos de verificación | Código de verificación",
   "confirm-password": "Contraseña de verificación",
+  "confirm-password-2": "Confirmación de contraseña",
   "code": "Código Qr",
   "use": "Use {word}",
-  "scan-code-or-use-verification": "Escanee el código Qr ó utilize uno de los codigos de verificación",
-  "2fa-activate": "Autenticación en dos pasos activada"
+  "scan-code-or-use-verification": "Escanée el código Qr ó utilize uno de los codigos de verificación",
+  "2fa-activate": "Autenticación en dos pasos activada",
+  "login": "Acceder",
+  "register": "Registrarse",
+  "if-you-want": "Si quiere puede",
+  "should-be-equals-to": "Debe ser igual a la",
+  "alredy-exists": "ya existe",
+  "user-register": "Bienvenido, {user} compruebe su correo para poder acceder",
+  "passwords": {
+    "length": "Debe tener al menos 8 caractéres"
+  }
 }

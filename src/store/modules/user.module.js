@@ -1,6 +1,8 @@
 import api from '@/utils/requests/api';
 import router from '@/router';
 import Cookies from 'js-cookie';
+import VueI18n from '@/plugins/i18n';
+import { i18n } from '../../plugins/i18n';
 
 const userModule = {
   namespaced: true,
@@ -10,6 +12,10 @@ const userModule = {
       twoFactor: false,
       data: null,
       themeDark: false,
+      check: {
+        username: false,
+        email: false,
+      },
     },
     login: {
       errors: null,
@@ -23,6 +29,7 @@ const userModule = {
   },
   getters: {
     getUser: (state) => state.user.data ?? JSON.parse(localStorage.getItem('newsapp_user_logged')),
+    getCheck: (state) => state.user.check,
     getIs2fa: (state) => state.user.twoFactor ?? localStorage.getItem('newsapp_two_factor') === 'true',
     getIsUserLoggedIn: (state) => state.user.auth ?? !!Cookies.get('newsapp_is_user_logged_in'),
     getLoading: (state) => state.show.loading,
@@ -77,7 +84,7 @@ const userModule = {
       const { data } = await api.post(`user/profile/edit/${profile.id}`, fd);
       if (data) {
         context.commit('SET_USER', data.data);
-        context.dispatch('snackbarModule/showSnackbar', { color: 'green', message: 'profile-updated', translate: true }, { root: true });
+        context.dispatch('snackbarModule/showSnackbar', { color: 'green', message: 'profile-updated' }, { root: true });
       }
       context.commit('SET_LOADING');
     },
@@ -134,10 +141,29 @@ const userModule = {
       context.commit('SET_LOADING');
       api.post('/fortify/two-factor-challenge', code)
         .then((res) => {
-          if (res?.status === 204) context.dispatch('login');
+          if (res?.status === 204 || res?.status === 302) context.dispatch('login');
         }).finally(() => context.commit('SET_LOADING'));
     },
     // 2fa
+    // register
+    fetchRegister(context, params) {
+      context.commit('SET_LOADING');
+      api.get('/sanctum/csrf-cookie').then(async () => {
+        const res = await api.post('/fortify/register', params).finally(() => context.commit('SET_LOADING'));
+        if (res.status === 201) {
+          router.push({ name: 'login' });
+          setTimeout(() => {
+            context.dispatch('snackbarModule/showSnackbar', { color: 'green', message: i18n.t('user-register', { user: params.username }) }, { root: true });
+          }, 700);
+        }
+      });
+    },
+    async fetchCheckField(context, params) {
+      const { data } = await api.post('/user/check/field', params);
+      if (params.username) context.commit('SET_CHECK_USERNAME', data.data);
+      else if (params.email) context.commit('SET_CHECK_EMAIL', data.data);
+    },
+    // register
   },
   mutations: {
     SET_TWO_FACTOR: (state, value) => {
@@ -148,6 +174,8 @@ const userModule = {
       state.user.data = user;
       localStorage.setItem('newsapp_user_logged', JSON.stringify(user));
     },
+    SET_CHECK_USERNAME: (state, username) => state.user.check.username = username,
+    SET_CHECK_EMAIL: (state, email) => state.user.check.email = email,
     SET_THEME_DARK: (state, value) => {
       localStorage.setItem('newsapp_theme_dark', value);
     },

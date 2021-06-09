@@ -7,7 +7,7 @@
       :color="$store.getters['snackbarModule/getSnackbar'].color"
     >
       <div class="d-flex align-center">
-        <span v-html="message"></span>
+        <span v-html="$store.getters['snackbarModule/getSnackbar'].message"></span>
         <v-spacer></v-spacer>
         <v-icon
           class="ml-4"
@@ -20,16 +20,3 @@
   </v-col>
 
 </template>
-
-<script>
-export default {
-  computed: {
-    message() {
-      const { message, translate } = this.$store.getters['snackbarModule/getSnackbar'];
-      return translate
-        ? this.$t(message)
-        : message;
-    },
-  },
-};
-</script>

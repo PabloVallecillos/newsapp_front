@@ -1,5 +1,5 @@
 import axios from 'axios';
-import VueI18n from '@/plugins/i18n';
+import { i18n } from '@/plugins/i18n';
 import store from '@/store';
 import handleResponseError from '@/utils/requests/handleResponseError';
 
@@ -8,7 +8,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((request) => {
-  request.baseURL = `${process.env.VUE_APP_API_URL}/${VueI18n.locale}`;
+  request.baseURL = `${process.env.VUE_APP_API_URL}/${i18n.locale}`;
   return request;
 });
 
@@ -36,7 +36,6 @@ instance.interceptors.response.use((response) => {
     {
       color: 'red',
       message: handleResponseError(data.errors ?? data.message),
-      translate: false,
     });
   return error;
 });

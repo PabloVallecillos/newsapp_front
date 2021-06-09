@@ -1,5 +1,6 @@
 <template>
-  <v-card class="mx-auto back-gradient-login-form" max-width="1000">
+  <transition name="bounce">
+    <v-card v-if="show" class="mx-auto back-gradient-login-form" max-width="1000">
     <v-form ref="registerForm" v-model="vModalRegisterForm" lazy-validation>
       <v-col class="d-flex justify-center pa-10">
         <v-icon x-large color="black" class="ml-2">mdi-newspaper-variant-multiple-outline</v-icon>
@@ -12,24 +13,23 @@
             v-model="user.username"
             prepend-inner-icon="mdi-account-outline"
             :label="$t('username')"
-            :rules="usernameRules"
-            outlined
-            dense
             color="grey darken-1"
             item-color="grey darken-1"
+            outlined
+            dense
             @keydown.enter="validateAndRegister"
+            :rules="checkUsernameRules"
           ></v-text-field>
           <v-text-field
             v-model="user.email"
-            prepend-inner-icon="mdi-email-outline"
+            prepend-inner-icon="mdi-account-outline"
             :label="$t('email')"
-            :placeholder="$t('email')"
             color="grey darken-1"
             item-color="grey darken-1"
             outlined
             dense
             @keydown.enter="validateAndRegister"
-            :rules="emailRules"
+            :rules="checkEmailRules"
           ></v-text-field>
         </div>
         <div class="ml-md-2 mr-md-2">
@@ -61,7 +61,7 @@
             v-model="user.password"
             prepend-inner-icon="mdi-key-outline"
             :label="$t('password')"
-            :rules="passwordRules"
+            :rules="passwordRulesCheckConfirm"
             outlined
             dense
             color="grey darken-1"
@@ -72,7 +72,7 @@
           <v-text-field
             v-model="user.passwordConfirmation"
             prepend-inner-icon="mdi-key-outline"
-            :label="$t('password-confirmation')"
+            :label="$t('confirm-password-2')"
             :rules="passwordConfirmationRules"
             outlined
             dense
@@ -84,21 +84,61 @@
         </div>
       </div>
       <!-- inputs -->
-      <v-col class="d-flex justify-center">
+      <v-col class="d-flex responsive px-4">
         <v-btn
+          style="flex: 1"
           elevation="3"
-          class="mr-4 ml-4 mb-4"
-          width="30%"
+          class="ml-md-5 mr-md-2 mb-4"
+          min-height="35px"
           :loading="getLoading"
           :disabled="!vModalRegisterForm"
           @click="validateAndRegister"
         >
-          Register
+          {{ $t('register') }}
         </v-btn>
+        <v-tooltip
+          :bottom="$vuetify.breakpoint.mdAndUp"
+          :top="$vuetify.breakpoint.mdAndDown"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              style="flex: 1"
+              class="ml-md-3 mr-md-3 mb-4"
+              elevation="3"
+              min-height="35px"
+              @click="validateAndRegister"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-google</v-icon>
+            </v-btn>
+          </template>
+          <span>registrarse con google</span>
+        </v-tooltip>
+        <v-tooltip
+          :bottom="$vuetify.breakpoint.mdAndUp"
+          :top="$vuetify.breakpoint.mdAndDown"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              style="flex: 1"
+              elevation="3"
+              min-height="35px"
+              class="ml-md-2 mr-md-5"
+              @click="validateAndRegister"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-facebook</v-icon>
+            </v-btn>
+          </template>
+          <span>registrarse con face</span>
+        </v-tooltip>
       </v-col>
     </v-form>
-    <snackbar/>
-  </v-card>
+    <snackbar></snackbar>
+    </v-card>
+  </transition>
 </template>
 
 <script>
@@ -109,6 +149,7 @@ export default {
   name: 'Register',
   data: () => ({
     vModalRegisterForm: false,
+    show: false,
     user: {
       username: null,
       email: null,
@@ -119,23 +160,42 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters('userModule', ['getIs2fa', 'getLoading']),
+    ...mapGetters('userModule', ['getIs2fa', 'getLoading', 'getCheck']),
   },
   methods: {
-    ...mapActions('userModule', ['fetchRegister']),
+    ...mapActions('userModule', ['fetchRegister', 'fetchCheckField']),
     validateAndRegister() {
-      console.log('readsf');
+      if (this.$refs.registerForm.validate()) {
+        this.fetchRegister({
+          username: this.user.username,
+          email: this.user.email,
+          name: this.user.name,
+          lastname: this.user.lastname,
+          password: this.user.password,
+          password_confirmation: this.user.passwordConfirmation,
+        });
+      }
+    },
+  },
+  watch: {
+    'user.username': function (username) {
+      this.fetchCheckField({ username });
+    },
+    'user.email': function (email) {
+      this.fetchCheckField({ email });
     },
   },
   mixins: [validationRules],
+  beforeMount() {
+    this.$nextTick(() => {
+      this.show = true;
+    });
+  },
 };
 
 </script>
 
 <style>
-.back-gradient-login-form {
-  background-image: linear-gradient(0deg, rgb(238, 238, 238) 0%, rgb(255, 255, 255) 46%, rgb(238, 238, 238) 100%);
-}
 @media only screen and (max-width: 960px) {
   .responsive {
     flex-direction: column;
