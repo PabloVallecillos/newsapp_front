@@ -43,5 +43,7 @@
   "user-register": "Bienvenido, {user} compruebe su correo para poder acceder",
   "passwords": {
     "length": "Debe tener al menos 8 caractéres"
-  }
+  },
+  "pls-set-password": "Por favor, establezca una contraseña",
+  "news": "Noticias"
 }

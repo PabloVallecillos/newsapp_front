@@ -106,7 +106,7 @@
               class="ml-md-3 mr-md-3 mb-4"
               elevation="3"
               min-height="35px"
-              @click="validateAndRegister"
+              :href="getUrlLoginGoogle"
               v-bind="attrs"
               v-on="on"
             >
@@ -125,7 +125,7 @@
               elevation="3"
               min-height="35px"
               class="ml-md-2 mr-md-5"
-              @click="validateAndRegister"
+              :href="getUrlLoginFacebook"
               v-bind="attrs"
               v-on="on"
             >
@@ -160,7 +160,7 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters('userModule', ['getIs2fa', 'getLoading', 'getCheck']),
+    ...mapGetters('userModule', ['getIs2fa', 'getLoading', 'getCheck', 'getUrlLoginFacebook', 'getUrlLoginGoogle']),
   },
   methods: {
     ...mapActions('userModule', ['fetchRegister', 'fetchCheckField']),
@@ -189,6 +189,7 @@ export default {
   beforeMount() {
     this.$nextTick(() => {
       this.show = true;
+      this.$store.dispatch('userModule/csrfCookie');
     });
   },
 };
@@ -196,10 +197,6 @@ export default {
 </script>
 
 <style>
-@media only screen and (max-width: 960px) {
-  .responsive {
-    flex-direction: column;
-    transition: ease all .5s !important;
-  }
-}
+mapsvg:geoViewBox="-169.110266 83.600842 190.486279 -58.508473"
+
 </style>

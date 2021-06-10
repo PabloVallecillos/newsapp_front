@@ -5,6 +5,7 @@ import middlewarePipeline from '@/router/middlewares/middlewarePipeline';
 import setLocale from './middlewares/setLocale';
 import isAuth from './middlewares/isAuth';
 import auth from './middlewares/auth';
+import { i18n } from '../plugins/i18n';
 
 const load = (component) => () => import(`@/views/${component}.vue`);
 const routerView = { template: '<router-view></router-view>' };
@@ -29,7 +30,7 @@ const routes = [{
       component: load('register'),
     },
     {
-      path: 'auth',
+      path: 'news',
       name: 'auth',
       component: load('auth'),
       meta: {
@@ -69,6 +70,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if (!to.name) {
+    return next({ name: 'login', params: { locale: i18n.locale } });
+  }
   if (!to.meta.middleware) {
     return next();
   }

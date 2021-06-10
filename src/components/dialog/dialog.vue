@@ -9,7 +9,7 @@
     <v-card>
       <v-toolbar dark :color="getDialog.options.vToolBar.color" dense flat class="d-flex justify-center">
         <v-toolbar-title :class="getDialog.options.vToolBar.class">
-            {{ $t(getDialog.options.vToolBar.title) }}
+            {{ getDialog.options.vToolBar.title }}
         </v-toolbar-title>
       </v-toolbar>
       <div class="pl-4 pr-4 mb-n2 mx-1">

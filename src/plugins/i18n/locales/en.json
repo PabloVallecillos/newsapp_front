@@ -43,5 +43,7 @@
   "user-register": "Welcome, {user} check your email to login",
   "passwords": {
     "length": "Must have at least 8 characters"
-  }
+  },
+  "pls-set-password": "Please set a password",
+  "news": "News"
 }

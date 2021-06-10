@@ -8,7 +8,9 @@ import vuetify from './plugins/vuetify';
 import { i18n } from './plugins/i18n';
 import api from './utils/requests/api';
 import handleResponseError from '@/utils/requests/handleResponseError';
+import VueSocialSharing from 'vue-social-sharing';
 
+Vue.use(VueSocialSharing);
 Vue.config.productionTip = false;
 // global methods
 Vue.prototype.$http = api;

@@ -6,7 +6,13 @@
   >
     <div class="d-flex align-center">
       <v-icon color="black">mdi-newspaper-variant-multiple-outline</v-icon>
-      <h4 class="ml-2 black--text">newsapp</h4>
+      <h4
+        class="ml-2 black--text"
+        style="cursor: pointer"
+        @click="$router.push({ name: 'auth' })"
+      >
+        newsapp
+      </h4>
     </div>
 
     <v-spacer></v-spacer>
@@ -94,6 +100,9 @@ export default {
   },
   computed: {
     ...mapGetters('userModule', ['getUser', 'getIsUserLoggedIn']),
+  },
+  mounted() {
+    console.log(this.getUser.avatar);
   },
 };
 </script>

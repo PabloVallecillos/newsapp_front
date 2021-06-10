@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import userModule from '@/store/modules/user.module';
 import snackbarModule from '@/store/modules/snackbar.module';
 import dialogModule from '@/store/modules/dialog.module';
+import newsModule from '@/store/modules/news.module';
 
 Vue.use(Vuex);
 
@@ -11,5 +12,6 @@ export default new Vuex.Store({
     userModule,
     snackbarModule,
     dialogModule,
+    newsModule,
   },
 });

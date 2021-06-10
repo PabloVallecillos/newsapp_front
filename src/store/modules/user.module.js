@@ -33,8 +33,8 @@ const userModule = {
     getIs2fa: (state) => state.user.twoFactor ?? localStorage.getItem('newsapp_two_factor') === 'true',
     getIsUserLoggedIn: (state) => state.user.auth ?? !!Cookies.get('newsapp_is_user_logged_in'),
     getLoading: (state) => state.show.loading,
-    getUrlLoginFacebook: () => `${process.env.VUE_APP_API_URL}/es/user/login/facebook`,
-    getUrlLoginGoogle: () => `${process.env.VUE_APP_API_URL}/es/user/login/google`,
+    getUrlLoginFacebook: () => `${process.env.VUE_APP_API_URL}/es/user/register/facebook?XDEBUG_SESSION_START=PHPSTORM`,
+    getUrlLoginGoogle: () => `${process.env.VUE_APP_API_URL}/es/user/register/google?XDEBUG_SESSION_START=PHPSTORM`,
   },
   actions: {
     fetchLogin(context, body) {
@@ -84,7 +84,7 @@ const userModule = {
       const { data } = await api.post(`user/profile/edit/${profile.id}`, fd);
       if (data) {
         context.commit('SET_USER', data.data);
-        context.dispatch('snackbarModule/showSnackbar', { color: 'green', message: 'profile-updated' }, { root: true });
+        context.dispatch('snackbarModule/showSnackbar', { color: 'green', message: i18n.t('profile-updated') }, { root: true });
       }
       context.commit('SET_LOADING');
     },
@@ -101,7 +101,7 @@ const userModule = {
               vToolBar: {
                 color: 'grey lighten-3',
                 class: 'black--text',
-                title: '2fa-activate',
+                title: i18n.t('2fa-activate'),
               },
               width: 500,
               zIndex: 200,
@@ -124,7 +124,7 @@ const userModule = {
     async qrCodeAndCodes2fa(context) {
       const resQrCode = await api.get('fortify/user/two-factor-qr-code');
       const resCodes = await api.get('fortify/user/two-factor-recovery-codes');
-      const qrCode = resQrCode.data.svg.replace('fill="#2d3748"', 'fill="#fcb74d"');
+      const qrCode = resQrCode.data.svg; // .replace('fill="#2d3748"', 'fill="#fcb74d"');
       context.commit('SET_USER', {
         ...context.getters.getUser,
         qrCode,
@@ -164,6 +164,9 @@ const userModule = {
       else if (params.email) context.commit('SET_CHECK_EMAIL', data.data);
     },
     // register
+    async csrfCookie() {
+      await api.get('/sanctum/csrf-cookie');
+    },
   },
   mutations: {
     SET_TWO_FACTOR: (state, value) => {

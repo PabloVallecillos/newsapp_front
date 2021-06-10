@@ -97,6 +97,7 @@
 <script>
 import validationRules from '@/utils/validationRules';
 import { mapActions, mapGetters } from 'vuex';
+import { i18n } from '../../plugins/i18n';
 
 export default {
   name: 'Login',
@@ -140,6 +141,9 @@ export default {
   },
   mixins: [validationRules],
   beforeMount() {
+    if (this.$route.query.socialregistered) {
+      setTimeout(() => this.$store.dispatch('snackbarModule/showSnackbar', { color: 'green', message: this.$t('user-register', { user: this.$route.query.socialregistered }) }), 700);
+    }
     this.$nextTick(() => {
       this.show = true;
     });
